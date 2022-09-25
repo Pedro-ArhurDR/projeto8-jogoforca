@@ -22,6 +22,25 @@
     justify-content: center;
 
 }
+.ganhou{
+    width: 24px;
+    height: 24px;
+    margin-left: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: green;
+
+}
+.perdeu{
+    width: 24px;
+    height: 24px;
+    margin-left: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: red;
+}
 .sublinhados{
     display: flex;
     width: auto;
@@ -32,7 +51,7 @@
     align-items: center;
     justify-content: space-around;
 }
-.letra{
+.letraI{
     background-color: #9EABB5;
     color: #4f545a;
     border-radius: 5px;
@@ -45,6 +64,30 @@
     margin: 5px 5px;
 
 }
+
+
+.desabilitar{
+    display:hidden
+}
+
+.letraF{
+    background-color: #E1ECF4;
+    color: rgb(58,117,157);
+    border-radius: 5px;
+    width: 49px;
+    height: 49px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    margin: 5px 5px;
+    border: 1px solid rgb(58,117,157);
+
+}
+
+
+
+
 .letras{
     display: flex;
     width: 800px;
