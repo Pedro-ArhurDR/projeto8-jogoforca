@@ -1,6 +1,7 @@
 import img0 from "./assets/forca0.png"
 import palavras from "./palavras"
 import { useState } from "react"
+import { render } from "react-dom"
 
 
 
@@ -13,23 +14,26 @@ export default function App(){
     const [letraE, setLetraE] = useState("")
     const [contaErros, setContaErros] = useState(0)
     console.log("numero de erros: " +contaErros)
-    const[p,setP]= useState("")
+    const[p,setP]= useState([])
     const [splitword,setSplitword ]= useState(word.split(""))
     const [contaacertos, setContaAcertos] = useState(0)
     console.log("PALAVRA DO JOGO: " + splitword)
     console.log(contaacertos)
     const [alfabeto,setAlfabeto] = useState(["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"])
     console.log("CONTEM " + letras)
-    console.log(" ACERTOU: "+contaacertos)
-
+    console.log(" ACERTOS: "+contaacertos)
+    const[teste,setTeste]= useState("")
     
-    
 
-    function letraclicada(letra){
+
+    function letraclicada(letra,idx){
         if(splitword.includes(letra) && letras.includes(letra) === false){
-            const novoarray = [...letras]
+            const novoarray = [...letras, letra]
             setLetras([...novoarray, letra])
             setContaAcertos(contaacertos+1)
+            console.log("POSIÇÃO DA LETRA: " + splitword.indexOf(letra))
+            console.log("TESTE: " + teste)
+            setP([splitword.map((l,index)=> <div key={index} class={novoarray.includes(l) ?"sublinhado":"esconder"}>{l}</div> )])
         }
         else{
             setContaErros(contaErros+1)
@@ -37,12 +41,19 @@ export default function App(){
     }
 
 
-    
+
+
     function Teclas(props){
         return botaoI===1 ? props.letras.map((l,index) => <div key={index} 
-        onClick={() => console.log(l) & letraclicada(l,index) & removertecla(l) & mostrarletra(l) &jogando()} class={classeL}>{l.toUpperCase()}</div>):
-        props.letras.map((l,index) => <div key={index} onClick={() => alert("clique em ESCOLHER PALAVRA para iniciar o jogo")} class={classeL}>{l.toUpperCase()}</div>)
+        onClick={() =>console.log(l)
+            & letraclicada(l,index) & removertecla(l) 
+            & mostrarletra(l)
+            &jogando()} class={classeL}>{l.toUpperCase()}</div>):
+        props.letras.map((l,index) => <div key={index} 
+        onClick={() => alert("clique em ESCOLHER PALAVRA para iniciar o jogo")} class={classeL}>{l.toUpperCase()}</div>)
     }
+
+    
 
     
 
@@ -63,7 +74,7 @@ export default function App(){
     }
 
     function jogando(){
-        const filteredArray = splitword.filter( (ele,pos)=>splitword.indexOf(ele) == pos);
+        const filteredArray = splitword.filter( (ele,pos)=>splitword.indexOf(ele) === pos);
         console.log("The filtered array",filteredArray);
 
         if(contaErros > 4){
@@ -73,28 +84,27 @@ export default function App(){
             alert('GANHOU')
         }
     }
-    
-    
+
+
+
+    function Botao(props){
+        return <button onClick={()=>botaoI ===0 ? 
+            setP(()=>splitword.map((l,index)=> <div key={index} class={letras.includes(l)?"sublinhado":"esconder"}>a</div> ))& 
+        setClasseL("letraF") & setBotaoI(1) : 
+           ()=> alert('termine o jogo para poder mudar a palavra')}>Escolher palavra</button>
+    }
+
     function Mostrarletras(props){
-
-        function esconder(){
-            return 
-        }
-
-        function mostrar(){
-            return
-        }
-
+        console.log(props)
         return<>
         <img src={props.img}/>
-        <div class="topR"><button onClick={botaoI ===0 ? 
-            ()=>setP(splitword.map((w,index)=> <div key={index} class="sublinhado">{letraE}</div>)) & setClasseL("letraF") & setBotaoI(1) : 
-           ()=> alert('termine o jogo para poder mudar a palavra')}>Escolher palavra</button>
-        <div class="sublinhados">{p}</div></div>
+        <div class="topR"><Botao/>
+        <div class="sublinhados">{props.letra}</div></div>
+        {console.log(p)}
         </>
     }
     return<>
-    <div class="top"><Mostrarletras img={img0} letra = {"w"}/>
+    <div class="top"><Mostrarletras img={img0} letra={p} />
     </div>
     <div class="bot"> 
     <div class="letras"><Teclas letras = {alfabeto}/></div>
