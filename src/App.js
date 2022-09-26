@@ -17,7 +17,6 @@ export default function App(){
     const [botaoI2,setBotaoI2] = useState(0)
     const [classeL, setClasseL] = useState("letraI")
     const [letras , setLetras] = useState([])
-    const [letraE, setLetraE] = useState("")
     const [contaErros, setContaErros] = useState(0)
     console.log("numero de erros: " +contaErros)
     const[p,setP]= useState([])
@@ -32,7 +31,8 @@ export default function App(){
     const[disable, setDisable] = useState(false)
     const imagens = [img0,img1,img2,img3,img4,img5,img6]
     const [jogo1, setJogo1] = useState(0)
-
+    const [chute, setChute ] = useState("")   
+    console.log(chute)
 
     function letraclicada(letra,idx){
         if(splitword.includes(letra) && letras.includes(letra) === false){
@@ -40,7 +40,7 @@ export default function App(){
             setLetras([...novoarray, letra])
             setContaAcertos(contaacertos+1)
             console.log("POSIÇÃO DA LETRA: " + splitword.indexOf(letra))
-            setP([splitword.map((l,index)=> <div key={index} class={novoarray.includes(l) ?"sublinhado":"esconder"}>{l.toUpperCase()}</div> )])
+            setP([splitword.map((l,index)=> <div data-identifier="word" key={index} class={novoarray.includes(l) ?"sublinhado":"esconder"}>{l.toUpperCase()}</div> )])
         }
         else{
             setContaErros(contaErros+1)
@@ -71,7 +71,7 @@ export default function App(){
 
 
     function Teclas(props){
-        return botaoI2===1 ? props.letras.map((l,index) => <button disabled={teste.includes(l) ?true:false} key={index}onClick={() =>console.log("TESTES"+teste)
+        return botaoI2===1 ? props.letras.map((l,index) => <button data-identifier="letter"  disabled={teste.includes(l) ?true:false} key={index}onClick={() =>console.log("TESTES"+teste)
         & letraclicada(l,index) & removertecla(l)&
         jogando()} class={teste.includes(l) ?"letraI":"letraF"}>
             {l.toUpperCase()}</button>):
@@ -86,23 +86,41 @@ export default function App(){
         setTeste([...teste,letra])
     }
 
-    function chutarpalavra(letra){
+    function chutarpalavra(palavra){
+        palavra = chute
         
+        if(palavra ===word2){
+            setP([splitword.map((l,index)=> <div key={index} class={"ganhou"}>{l.toUpperCase()}</div> )])
+            setTeste(alfabeto)
+            setBotaoI(0)
+            setContaAcertos(0)
+            setContaErros(0)
+            setChute("")
+            
+        }
+        else{
+            setP([splitword.map((l,index)=> <div key={index} class={"perdeu"}>{l.toUpperCase()}</div> )])
+            setTeste(alfabeto)
+            setBotaoI(0)
+            setContaAcertos(0)
+            setContaErros(6)
+            setChute("")
+        }
     }
-
+//Não entendi exatamenete onde colocar o data-identifier="word"
 
     function jogando(){
         const filteredArray = splitword.filter( (ele,pos)=>splitword.indexOf(ele) === pos);
         console.log("The filtered array",filteredArray);
 
         if(contaErros > 4){
-            setP([splitword.map((l,index)=> <div key={index} class={"perdeu"}>{l.toUpperCase()}</div> )])
+            setP([splitword.map((l,index)=> <div data-identifier="word" key={index} class={"perdeu"}>{l.toUpperCase()}</div> )])
             setTeste(alfabeto)
             setBotaoI(0)
             setContaAcertos(0)
         }
         else if((filteredArray.length-1) === contaacertos){
-            setP([splitword.map((l,index)=> <div key={index} class={"ganhou"}>{l.toUpperCase()}</div> )])
+            setP([splitword.map((l,index)=> <div data-identifier="word" key={index} class={"ganhou"}>{l.toUpperCase()}</div> )])
             setTeste(alfabeto)
             setBotaoI(0)
             setContaAcertos(0)
@@ -115,7 +133,7 @@ export default function App(){
 
 
     function Botao(){
-        return <button disabled={botaoI===1} onClick={()=>jogo1===0 && botaoI ===0 ?  
+        return <button data-identifier="choose-word" disabled={botaoI===1} onClick={()=>jogo1===0 && botaoI ===0 ?  
             setP(()=>splitword.map((l,index)=> <div key={index} class={letras.includes(l)?"sublinhado":"esconder"}></div> ))& 
         setClasseL("letraF") & setBotaoI(1)& setJogo1(1) & setBotaoI2(1): window.location.reload()}>Escolher palavra</button>
     }
@@ -123,7 +141,7 @@ export default function App(){
     function Mostrarletras(props){
         console.log(props)
         return<>
-        <img src={props.img}/>
+        <img data-identifier="game-image" src={props.img}/>
         <div className="topR"><Botao/>
         <div className="sublinhados">{props.letra}</div></div>
         {console.log(p)}
@@ -134,7 +152,8 @@ export default function App(){
     </div>
     <div class="bot"> 
     <div class="letras"><Teclas letras = {alfabeto}/></div>
-    <div class="texto"> Ja sei a palavra <input placeholder=""/> <button>chutar</button> </div>
+    <div class="texto"> Ja sei a palavra <input data-identifier="type-guess" disabled={botaoI===0} value={chute} onChange={(e=>setChute(e.target.value))} type={"text"} placeholder="chute"/> 
+    <button data-identifier="guess-button" disabled={botaoI===0} onClick={chutarpalavra}>chutar</button> </div>
     </div>
     </>
 }
