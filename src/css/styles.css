@@ -13,7 +13,6 @@
     background-color: green;
 }
 .sublinhado{
-    border-bottom: 1px black solid;
     width: 24px;
     height: 24px;
     margin-left: 3px;
@@ -22,6 +21,7 @@
     justify-content: center;
 
 }
+
 
 .esconder{
     border-bottom: 1px black solid;
